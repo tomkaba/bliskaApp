@@ -1,0 +1,53 @@
+<ion-view title="Ustawienia">
+<ion-content class="has-header padding">
+ 
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Wysokość pożyczki</span>
+	<div class="range">
+		<input type="range" min="{{user.loanmin}}" max="3000" step="50" value="{{user.loanvalue}}"  ng-model="user.loanvalue"> {{user.loanvalue}} PLN
+	</div>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Maksymalny czas decyzji</span>
+	<div class="range">
+		<input type="range" min="{{user.waittimemin}}" max="240" step="15" value="{{user.waittime}}"  ng-model="user.waittime"> {{user.waittime}} minut
+	</div>
+  </label>
+
+ <li class="item item-toggle">
+     Pokaż z weryfikacją zarobków
+     <label class="toggle toggle-calm">
+       <input type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+  <li class="item item-toggle">
+     Pokaż z weryfikacją BIK
+     <label class="toggle toggle-calm">
+       <input type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+  <div class="card">
+  <div class="item item-text-wrap">
+    Zaznaczenie poniższej opcji jest wymagane gdy zamierzasz ubiegać o pożyczki z weryfikacją BIK i chcesz dostać wstępną decyzję przez aplikację.
+  </div>
+ </div>
+ 
+	<li class="item item-checkbox">
+		 <label class="checkbox">
+			<input type="checkbox" value="1">
+		</label>
+		 <span class="item-text-wrap" style="font-size:14px;">Każdorazowo, składając wniosek o pożyczkę za pomocą aplikacji mobilnej Bliska Pożyczka upoważniam podmiot, do którego wniosek pożyczkowy składam do występowania w moim imieniu do Biura Informacji Kredytowej S.A. o udostępnienie informacji, w tym stanowiących tajemnicę bankową, oraz do składania w moim imieniu oświadczenia o zgodzie na przetwarzanie danych osobowych. </span>
+	</li>
+  
+</ion-content>
+</ion-view>
+<ion-footer-bar class="bar-dark">
+			<a href="#/map/home" nav-clear menu-close class="button button-small button-dark" ">anuluj</button>
+			<a href="saveSettings();" class="button button-small button-assertive" style="float:right">zapisz</button>
+        </ion-footer-bar>
