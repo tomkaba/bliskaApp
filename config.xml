@@ -36,6 +36,30 @@
   <gap:plugin name="org.apache.cordova.network-information"/>
   <gap:plugin name="org.apache.cordova.splashscreen"/>
   <gap:plugin name="org.apache.cordova.vibration"/>
+ 
+  
+	<!-- iPhone and iPod touch -->
+	<splash src="Default.png" platform="ios" width="320" height="480" />
+	<splash src="Default@2x.png" platform="ios" width="640" height="960" />
+
+	<!-- iPhone 5 / iPod Touch (5th Generation) -->
+	<splash src="Default-568h@2x.png" platform="ios" width="640" height="1136" />
+
+	<!-- iPhone 6 -->
+	<splash src="Default-667h@2x.png" platform="ios" width="750" height="1334" />
+	<splash src="Default-Portrait-736h@3x.png" platform="ios" width="1242" height="2208" />
+	<splash src="Default-Landscape-736h@3x.png" platform="ios" width="2208" height="1242" />
+
+	<!-- iPad -->
+	<splash src="Default-Portrait.png" platform="ios" width="768" height="1024" />
+	<splash src="Default-Landscape.png" platform="ios" width="1024" height="768" />
+
+	<!-- Retina iPad -->
+	<splash src="Default-Portrait@2x.png" platform="ios" width="1536" height="2048" />
+	<splash src="Default-Landscape@2x.png" platform="ios" width="2048" height="1536" />
+	
+	<splash src="splash.png" />
+	
   <icon src="icon.png"/>
   <icon src="www/res/icon/android/icon-36-ldpi.png" gap:platform="android" gap:qualifier="ldpi"/>
   <icon src="www/res/icon/android/icon-48-mdpi.png" gap:platform="android" gap:qualifier="mdpi"/>
@@ -50,17 +74,13 @@
   <icon src="www/res/icon/webos/icon-64.png" gap:platform="webos"/>
   <icon src="www/res/icon/windows-phone/icon-48.png" gap:platform="winphone"/>
   <icon src="www/res/icon/windows-phone/icon-173-tile.png" gap:platform="winphone" gap:role="background"/>
+  
   <gap:splash src="www/res/screen/android/screen-ldpi-portrait.png" gap:platform="android" gap:qualifier="port-ldpi"/>
   <gap:splash src="www/res/screen/android/screen-mdpi-portrait.png" gap:platform="android" gap:qualifier="port-mdpi"/>
   <gap:splash src="www/res/screen/android/screen-hdpi-portrait.png" gap:platform="android" gap:qualifier="port-hdpi"/>
   <gap:splash src="www/res/screen/android/screen-xhdpi-portrait.png" gap:platform="android" gap:qualifier="port-xhdpi"/>
-  <gap:splash src="www/res/screen/blackberry/screen-225.png" gap:platform="blackberry"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait.png" gap:platform="ios" width="320" height="480"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait-2x.png" gap:platform="ios" width="640" height="960"/>
-  <gap:splash src="www/res/screen/ios/screen-iphone-portrait-568h-2x.png" gap:platform="ios" width="640" height="1136"/>
-  <gap:splash src="www/res/screen/ios/screen-ipad-portrait.png" gap:platform="ios" width="768" height="1024"/>
-  <gap:splash src="www/res/screen/ios/screen-ipad-landscape.png" gap:platform="ios" width="1024" height="768"/>
-  <gap:splash src="www/res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone"/>
+  
+  
   <access origin="*"/>
   <plugin name="cordova-plugin-whitelist" version="1"/>
   <allow-intent href="http://*/*"/>
