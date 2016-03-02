@@ -7,10 +7,22 @@ var MapApp = angular.module('MapApp', [
  */
 MapApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 	$stateProvider
-		.state('menu', {url: "/map", abstract: true, templateUrl: "menu.html"})
-		.state('menu.home', {url: '/home', views: {'menuContent': {templateUrl: 'gpsView.html', controller: 'GpsCtrl'} }  })
-		.state('menu.settings', {url: '/settings', views: {'menuContent': {templateUrl: 'templates/settingsView.html', controller:
- 'SettingsCtrl'} }  })
+		.state('menu', {
+			url: "/map", 
+			abstract: true, 
+			templateUrl: "menu.html"})
+		.state('menu.home', {
+			url: '/home', 
+			views: {'menuContent': {templateUrl: 'gpsView.html', controller: 'GpsCtrl',resolve: {
+				userdata: function(UserdataService) {	return UserdataService.getUserdata();  }  
+				} } }
+			 })
+		.state('menu.settings', {
+			url: '/settings', 
+			views: {'menuContent': {templateUrl: 'templates/settingsView.html', controller: 'SettingsCtrl',resolve: {
+				userdata: function(UserdataService) {	return UserdataService.getUserdata(); }  
+				} } },
+			})
  		.state('menu.personal', {url: '/personal', views: {'menuContent': {templateUrl: 'templates/personalView.html', controller:
  'PersonalCtrl'} }  })
 
@@ -29,80 +41,80 @@ MapApp.controller('HeaderCtrl', function($scope) {
  * MAIN CONTROLLER - handle inapp browser
  */
 MapApp.controller('MainCtrl', ['$scope', function($scope) {
-  // do something
+	
+	
 }]);
 
 /**
  * A google map / GPS controller.
  */
-MapApp.controller('GpsCtrl', ['$scope','$ionicPlatform', '$location',
-	function($scope, $ionicPlatform, $location) {
-
+MapApp.controller('GpsCtrl', 	function($scope, $ionicPlatform, $location,userdata) {
+	 $scope.user = userdata;	
 	// init gps array
     $scope.whoiswhere = [];
     $scope.basel = { lat: 51.107885, lon: 17.038538 };
 	
-	$scope.hero = 0;
+	console.log($scope.userdata);
 	
-	$scope.user = { value: 1000,min:500,max:5000,step: 50, waittime: 60, docs: 1 };
-
     // check login code
 	$ionicPlatform.ready(function() {	
-		navigator.geolocation.getCurrentPosition(function(position) {
 			
-			$scope.position=position;
-	        var c = position.coords;
-	        console.log('Current position:'+c.latitude+','+c.longitude);
-			$scope.gotoLocation(c.latitude, c.longitude);
-		    $scope.$apply();
-		    },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
+			if(typeof($scope.centerMe)=='function')
+				$scope.centerMe();
 			
-			$scope.gotoLocation = function (lat, lon) {
-			
-			
-	        if ($scope.lat != lat || $scope.lon != lon) {
-	            $scope.basel = { lat: lat, lon: lon };
-	            $scope.$apply("basel");
-				}
-			};
-
 		    // some points of interest to show on the map
 		    // to be user as markers, objects should have "lat", "lon", and "name" properties
 		    $scope.whoiswhere = [ 
 			{ 'name': 'Ja', 'type':'me', 'lat':  $scope.basel.lat, 'lon' : $scope.basel.lon}, 
-			{ 'name': 'Krynicka InPost', 'type':'point', 'address':'ul. Krynicka 59', 'tel':'500 001 123', 'lat': 51.079788, 'lon' : 17.047384, 'open':'9:00-18:00', 'maxloan':2000, 'waittime':30}, 
-			{ 'name': 'FerioGaj Pożyczki', 'type':'point', 'lat': 51.076548, 'address':'ul. Świeradowska 61', 'tel':'500 002 987', 'lon' : 17.044273,  'open':'10:00-17:00', 'maxloan':10000,'waittime':180 } ,
-			{ 'name': 'Góralska Pożyczki', 'type':'point', 'lat': 51.109062, 'lon' : 17.002332, 'address':'ul. góralska 5', 'tel':'500 002 987',  'open':'07:00-24:00', 'maxloan':1000,'waittime':30 } ,
-			{ 'name': 'ULTIMO SA', 'type':'point', 'lat': 51.111711, 'lon' : 17.009078, 'address':'ul. Braniborska 58', 'tel':'500 002 987',  'open':'10:00-16:00', 'maxloan':10000,'waittime':240 } ,
-			{ 'name': 'SKY TOWER', 'type':'point', 'lat': 51.094332, 'lon' : 17.020215, 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
+			{ 'name': 'Krynicka InPost', 'type':'point', 'priority':2, 'address':'ul. Krynicka 59', 'tel':'500 001 123', 'lat': 51.079788, 'lon' : 17.047384, 'open':'9:00-18:00', 'maxloan':2000, 'waittime':30}, 
+			{ 'name': 'FerioGaj Pożyczki', 'type':'point', 'priority':1, 'lat': 51.076548, 'address':'ul. Świeradowska 61', 'tel':'500 002 987', 'lon' : 17.044273,  'open':'10:00-17:00', 'maxloan':10000,'waittime':180 } ,
+			{ 'name': 'Góralska Pożyczki', 'type':'point', 'priority':1, 'lat': 51.109062, 'lon' : 17.002332, 'address':'ul. góralska 5', 'tel':'500 002 987',  'open':'07:00-24:00', 'maxloan':1000,'waittime':30 } ,
+			{ 'name': 'ULTIMO SA', 'type':'point', 'priority':2, 'lat': 51.111711, 'lon' : 17.009078, 'address':'ul. Braniborska 58', 'tel':'500 002 987',  'open':'10:00-16:00', 'maxloan':10000,'waittime':240 } ,
+			{ 'name': 'SKY TOWER', 'type':'point', 'priority':1, 'lat': 51.094332, 'lon' : 17.020215, 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
 			
 			
 			];
 
-			});
+	});
 			
 	$scope.$on('$ionicView.afterEnter', function(){
 			
 		
 	}); 
   		
-
-}]);
+		
+	$scope.centerMe = function () {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				$scope.position=position;
+				var c = position.coords;
+				console.log('Current position:'+c.latitude+','+c.longitude);
+				$scope.gotoLocation(c.latitude, c.longitude);
+				$scope.$apply();
+		    },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
+			
+			$scope.gotoLocation = function (lat, lon) {
+				if ($scope.lat != lat || $scope.lon != lon) 
+				{
+					$scope.basel = { lat: lat, lon: lon };
+					$scope.$apply("basel");
+				}
+			};	
+	};
+	
+});
 
 /**
  * MAIN CONTROLLER - handle inapp browser
  */
-MapApp.controller('SettingsCtrl', ['$scope', function($scope) {
-	$scope.user = {
-    loanmin: '200',
-    loanmax: '3000',
-	loanvalue: '1000',
-	waittime: '60',
-	waittimemin: '15',
-	waittimemax: '240'
-  };
+MapApp.controller('SettingsCtrl', function($scope,userdata) {
+	$scope.user = userdata;
+	console.log($scope.user);
+	$scope.saveSettings = function () {
+		
+		window.location.hash="#t/home";
+	}
   
-}]);
+});
 
 
 MapApp.controller('PersonalCtrl', ['$scope', function($scope) {
@@ -140,6 +152,26 @@ MapApp.filter('lon', function () {
     }
 });
 
+
+
+MapApp.service('UserdataService', function($q) {
+
+	return {
+		userdata: 
+			{
+				loanmin: '200',
+				loanmax: '3000',
+				loanvalue: '1000',
+				waittime: '60',
+				waittimemin: '15',
+				waittimemax: '240'
+			},
+		getUserdata: function() {
+			//console.log(this.userdata);
+			return this.userdata;
+		    }
+	}
+});
 
 /**
  * Handle Google Maps API V3+
@@ -202,9 +234,15 @@ MapApp.directive("appMap", function ($window) {
 					mapTypeId: google.maps.MapTypeId.ROADMAP,
 					panControl: true,
 					zoomControl: true,
+					zoomControlOptions: {
+						position: google.maps.ControlPosition.RIGHT_TOP
+					},
 					mapTypeControl: true,
 					scaleControl: false,
-					streetViewControl: false,
+					streetViewControl: true,
+					streetViewControlOptions: {
+						position: google.maps.ControlPosition.RIGHT_TOP
+					},
 					navigationControl: true,
 					disableDefaultUI: true,
 					overviewMapControl: true
@@ -240,15 +278,19 @@ MapApp.directive("appMap", function ($window) {
 	
 
 			// Info window trigger function 
-			function onItemClick(pin, label, open, address, tel, waittime) { 
-				// Create content  
-				//var contentString = "Name: " + label + "<br />Time: " + datum;
+			function onItemClick(pin, label, open, address, tel, waittime, priority) { 
+				/* var description='';
 				
-				var contentString = '<div class="list card" style="padding:0;text-decoration:none">'+
-								  '<a class="item bar bar-positive"><span class="title" >'+label+'</span></a>'+
+				if(priority>1)
+				{
+					label=label+'&nbsp;<span style="float:right;font-size:8px;margin-top:5px"><img src="star.png" height=24></img></span>';
+				}
+				*/
+				
+				var contentString = '<div class="list card" style="padding:0;text-decoration:none;font-family:Helvetica;">'+
+								  '<a class="item bar bar-positive"><span class="title" >'+label+' <i class="icon ion-ios-more-outline" style="float:right"></i></span></a>'+
 								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-ios-time-outline"></i>' + open +'</a>'+
 								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-home"></i>' + address +'</a>'+
-								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-ios-telephone"></i>' + tel +'</a>'+
 								  ' <a class="item item-icon-left" style="font-size:12px" ><i class="icon ion-ios-stopwatch-outline"></i>' + waittime +' minut</a>'+
 								  ' <a class="item"><button class="button button-small button-assertive" style="float:right;">Zamów i odbierz za '+waittime+' minut</button></a>'+
 								  '</div>';
@@ -270,7 +312,7 @@ MapApp.directive("appMap", function ($window) {
 					//console.log("map: marker listener for " + member.name);
 					var href="http://maps.apple.com/?q="+member.lat+","+member.lon;
 					map.setCenter(location);
-					onItemClick(marker, member.name, member.open, member.address,member.tel,member.waittime);
+					onItemClick(marker, member.name, member.open, member.address,member.tel,member.waittime,member.priority);
 					};
 				}
 				
@@ -290,9 +332,14 @@ MapApp.directive("appMap", function ($window) {
 						if(m.type=='me')
 							var mm = new google.maps.Marker({ position: loc, map: map, title: m.name, icon:'man.png' });
 						else
-							var mm = new google.maps.Marker({ position: loc, map: map, title: m.name });
-						//console.log("map: make marker for " + m.name);
-						google.maps.event.addListener(mm, 'mousedown', markerCb(mm, m, loc));
+						{
+							if(m.priority==1)
+								var mm = new google.maps.Marker({ position: loc, map: map, title: m.name });
+							else
+								var mm = new google.maps.Marker({ position: loc, map: map, title: m.name, icon:'bluemarker.png' });
+							
+							google.maps.event.addListener(mm, 'mousedown', markerCb(mm, m, loc));
+						}
 						currentMarkers.push(mm);
 						}
 					}

@@ -18,48 +18,44 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">  
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     
-		
-		<!-- cordova script -->
-		
-		<!-- your app's script -->
 	</head>
 	
-	<!-- 'starter' is the name of this angular module (js/app.js)-->
+	
 	<body ng-app="MapApp">
 		<div ng-controller="MainCtrl">       
 			<ion-nav-view></ion-nav-view>
 		</div>
 		
 		<script id="menu.html" type="text/ng-template">
-<ion-side-menus enable-menu-with-back-views="false">
-    <ion-side-menu-content>
-        <ion-nav-bar class="bar-stable nav-title-slide-ios7">
-            <ion-nav-back-button>
-            </ion-nav-back-button>
+			<ion-side-menus enable-menu-with-back-views="false">
+				<ion-side-menu-content>
+					<ion-nav-bar class="bar-stable nav-title-slide-ios7">
+						<ion-nav-back-button>
+						</ion-nav-back-button>
 
-            <ion-nav-buttons side="left">
-                <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-                </button>
-            </ion-nav-buttons>
-        </ion-nav-bar>
-        <ion-nav-view name="menuContent"></ion-nav-view>
-    </ion-side-menu-content>
+						<ion-nav-buttons side="left">
+							<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+							</button>
+						</ion-nav-buttons>
+					</ion-nav-bar>
+					<ion-nav-view name="menuContent"></ion-nav-view>
+				</ion-side-menu-content>
 
-    <ion-side-menu side="left">
-        <ion-header-bar class="bar-stable">
-            <h1 class="title">Menu</h1>
-        </ion-header-bar>
-        <ion-content>
-            <ion-list>
-               <ion-item nav-clear menu-close href="#/map/home" class="item item-icon-left" >
-                    <i class="icon ion-ios7-ionic-outline"></i>Mapa pożyczek
-                </ion-item>
-               <ion-item nav-clear menu-close href="#/map/settings" class="item item-icon-left" >
-                    <i class="icon ion-ios7-help"></i>Ustawienia
-                </ion-item>
-				<ion-item nav-clear menu-close href="#/map/personal" class="item item-icon-left" >
-                    <i class="icon ion-ios7-help"></i>Twoje dane
-                </ion-item>
+				<ion-side-menu side="left">
+					<ion-header-bar class="bar-stable">
+						<h1 class="title">Menu</h1>
+					</ion-header-bar>
+					<ion-content>
+						<ion-list>
+						   <ion-item nav-clear menu-close href="#/map/home" class="item item-icon-left" >
+								<i class="icon ion-map"></i>Mapa pożyczek
+							</ion-item>
+						   <ion-item nav-clear menu-close href="#/map/settings" class="item item-icon-left" >
+								<i class="icon ion-gear-b"></i>Ustawienia
+							</ion-item>
+							<ion-item nav-clear menu-close href="#/map/personal" class="item item-icon-left" >
+								<i class="icon ion-person"></i>Twoje dane
+							</ion-item>
 						</ion-list>
 					</ion-content>
 				</ion-side-menu>
@@ -67,25 +63,29 @@
 		</script>
     
 		<script id="gpsView.html" type="text/ng-template">
-		<ion-view title="BLISKA POŻYCZKA">
-		<ion-content class="has-header ">
-		<ion-item><i class="icon ion-cash"> {{user.value}} PLN</i>
-				<i class="icon ion-ios-stopwatch-outline"> {{user.waittime}} minut</i>
-				
-				<a href="/#/map/settings"><i class="icon ion-ios-gear-outline" style="float:right">zmień</i></a>
-		</ion-item>
-		<!-- map directive-->
-		<app-map style="height:100%;width:100%;"
-			center="basel"
-			zoom="13"
-			markers="whoiswhere"
-			> 
-		</app-map>
-		</ion-content>
-		</ion-view>
-		<ion-footer-bar class="bar-dark">
-			<img src="hk.png" height="40px"><span>1000 zł na już!</span> <button class="button button-small button-assertive">sprawdź</button>
-        </ion-footer-bar>
+			<ion-view title="BLISKA POŻYCZKA">
+			<ion-content class="has-header ">
+			<ion-item class="bar bar-stable">
+					<i class="icon ion-pinpoint" ng-click="centerMe()"></i>
+					<div style="float:right">
+						<a href="#/map/settings" style="text-decoration:none;color:black;">
+						<i class="icon ion-cash"> {{user.loanvalue}} PLN</i>
+						<i class="icon ion-ios-stopwatch-outline"> {{user.waittime}} minut</i>
+						<span style="color:black"><i class="icon ion-gear-b" ></i></style></a>
+					</div>
+			</ion-item>
+			<!-- map directive-->
+			<app-map style="height:100%;width:100%;"
+				center="basel"
+				zoom="13"
+				markers="whoiswhere"
+				> 
+			</app-map>
+			</ion-content>
+			</ion-view>
+			<ion-footer-bar class="bar-dark">
+				<img src="hk.png" height="40px"><span></span> <button class="button button-small button-assertive">sprawdź</button>
+			</ion-footer-bar>
 		</script>
 		
 	</body>
