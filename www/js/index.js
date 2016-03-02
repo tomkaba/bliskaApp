@@ -54,7 +54,10 @@ MapApp.controller('GpsCtrl', 	function($scope, $ionicPlatform, $location,userdat
     $scope.whoiswhere = [];
     $scope.basel = { lat: 51.107885, lon: 17.038538 };
 	
-	console.log($scope.userdata);
+	$scope.mapHeight= window.innerHeight-130;
+	$scope.mapWidth= window.innerWidth;
+	
+	
 	
     // check login code
 	$ionicPlatform.ready(function() {	
