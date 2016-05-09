@@ -4,23 +4,27 @@
   <div class="list">
   <label class="item item-input item-stacked-label">
     <span class="input-label">Imię</span>
-    <input type="text" placeholder="tu wpisz swoje imię">
+    <input type="text" placeholder="tu wpisz swoje imię" name="firstname" value="{{user.vorname}}">
   </label>
   <label class="item item-input item-stacked-label">
     <span class="input-label">Nazwisko</span>
-    <input type="text" placeholder="tu wpisz swoje nazwisko">
+    <input type="text" placeholder="tu wpisz swoje nazwisko" name="surname" value="{{user.name}}">
   </label>
   <label class="item item-input item-stacked-label">
     <span class="input-label">Email</span>
-    <input type="text" placeholder="tu wpisz e-mail, na który chcesz potwierdzenie">
+    <input type="email" placeholder="twoj@email.pl" name="email" value="{{user.email}}">
   </label>
   <label class="item item-input item-stacked-label">
     <span class="input-label">Telefon</span>
-    <input type="text" placeholder="tu wpisz numer telefonu do kontaktu">
+    <input type="text" placeholder="tu wpisz numer telefonu do kontaktu" name="tel" value="{{user.phone}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">PESEL</span>
+    <input type="text" placeholder="tu wpisz swój pesel" name="pesel" value="{{user.pesel}}">
   </label>
    <label class="item item-input item-stacked-label">
     <span class="input-label">Dowód osobisty</span>
-    <input type="text" placeholder="tu wpisz serię i numer swojego dowodu">
+    <input type="text" placeholder="tu wpisz serię i numer swojego dowodu" name="dowod" value="{{user.dowod}}">
   </label>
 </div>
 	
@@ -28,5 +32,5 @@
 </ion-view>
 <ion-footer-bar class="bar-dark">
 			<a href="#/t/map/home" nav-clear menu-close class="button button-small button-dark" ">anuluj</button>
-			<a href="saveSettings();" class="button button-small button-assertive" style="float:right">zapisz</button>
+			<a ng-click="savePersonal();" class="button button-small button-assertive" style="float:right">zapisz</button>
         </ion-footer-bar>

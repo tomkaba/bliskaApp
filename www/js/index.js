@@ -13,6 +13,7 @@ MapApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 			templateUrl: "menu.html"})
 		.state('menu.home', {
 			url: '/home', 
+			cache: true,
 			views: {'menuContent': {templateUrl: 'gpsView.html', controller: 'GpsCtrl',resolve: {
 				userdata: function(UserdataService) {	return UserdataService.getUserdata();  }  
 				} } }
@@ -23,8 +24,21 @@ MapApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 				userdata: function(UserdataService) {	return UserdataService.getUserdata(); }  
 				} } },
 			})
- 		.state('menu.personal', {url: '/personal', views: {'menuContent': {templateUrl: 'templates/personalView.html', controller:
- 'PersonalCtrl'} }  })
+ 		.state('menu.personal', {
+			url: '/personal', 
+			views: {'menuContent': {templateUrl: 'templates/personalView.html', controller: 'PersonalCtrl',resolve: {  
+				userdata: function(UserpersonalService) {	return UserpersonalService.getUserdata(); }  
+				}  } }
+			})
+		.state('menu.ordered', {
+			url: '/ordered', 
+			cache: false,
+			views: {'menuContent': {templateUrl: 'templates/orderedView.html', cache:false, controller: 'OrderedCtrl',resolve: {  
+				orderdata: function(OrderdataService) {	return OrderdataService.getOrderdata(); }  
+				} }  } 
+			})
+	
+			
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/map/home');
@@ -44,6 +58,8 @@ MapApp.controller('MainCtrl', ['$scope', function($scope) {
 	
 	
 }]);
+
+
 
 /**
  * A google map / GPS controller.
@@ -69,11 +85,11 @@ MapApp.controller('GpsCtrl', 	function($scope, $ionicPlatform, $location,userdat
 		    // to be user as markers, objects should have "lat", "lon", and "name" properties
 		    $scope.whoiswhere = [ 
 			{ 'name': 'Ja', 'type':'me', 'lat':  $scope.basel.lat, 'lon' : $scope.basel.lon}, 
-			{ 'name': 'Krynicka InPost', 'type':'point', 'priority':2, 'address':'ul. Krynicka 59', 'tel':'500 001 123', 'lat': 51.079788, 'lon' : 17.047384, 'open':'9:00-18:00', 'maxloan':2000, 'waittime':30}, 
-			{ 'name': 'FerioGaj Pożyczki', 'type':'point', 'priority':1, 'lat': 51.076548, 'address':'ul. Świeradowska 61', 'tel':'500 002 987', 'lon' : 17.044273,  'open':'10:00-17:00', 'maxloan':10000,'waittime':180 } ,
-			{ 'name': 'Góralska Pożyczki', 'type':'point', 'priority':1, 'lat': 51.109062, 'lon' : 17.002332, 'address':'ul. góralska 5', 'tel':'500 002 987',  'open':'07:00-24:00', 'maxloan':1000,'waittime':30 } ,
-			{ 'name': 'ULTIMO SA', 'type':'point', 'priority':2, 'lat': 51.111711, 'lon' : 17.009078, 'address':'ul. Braniborska 58', 'tel':'500 002 987',  'open':'10:00-16:00', 'maxloan':10000,'waittime':240 } ,
-			{ 'name': 'SKY TOWER', 'type':'point', 'priority':1, 'lat': 51.094332, 'lon' : 17.020215, 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
+			{ 'name': 'Krynicka InPost', 'type':'point', 'priority':2, 'city':'Wrocław', 'address':'ul. Krynicka 59', 'tel':'500 001 123', 'lat': 51.079788, 'lon' : 17.047384, 'open':'9:00-18:00', 'maxloan':2000, 'waittime':30}, 
+			{ 'name': 'FerioGaj Pożyczki', 'type':'point', 'priority':1, 'lat': 51.076548, 'city':'Wrocław', 'address':'ul. Świeradowska 61', 'tel':'500 002 987', 'lon' : 17.044273,  'open':'10:00-17:00', 'maxloan':10000,'waittime':180 } ,
+			{ 'name': 'Góralska Pożyczki', 'type':'point', 'priority':1, 'lat': 51.109062, 'lon' : 17.002332, 'city':'Wrocław', 'address':'ul. góralska 5', 'tel':'500 002 987',  'open':'07:00-24:00', 'maxloan':1000,'waittime':30 } ,
+			{ 'name': 'ULTIMO SA', 'type':'point', 'priority':2, 'lat': 51.111711, 'lon' : 17.009078, 'city':'Wrocław', 'address':'ul. Braniborska 58', 'tel':'500 002 987',  'open':'10:00-16:00', 'maxloan':10000,'waittime':240 } ,
+			{ 'name': 'SKY TOWER', 'type':'point', 'priority':1, 'lat': 51.094332, 'lon' : 17.020215, 'city':'Wrocław', 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
 			
 			
 			];
@@ -111,8 +127,10 @@ MapApp.controller('GpsCtrl', 	function($scope, $ionicPlatform, $location,userdat
  */
 MapApp.controller('SettingsCtrl', function($scope,userdata) {
 	$scope.user = userdata;
-	console.log($scope.user);
 	$scope.saveSettings = function () {
+		
+		window.localStorage.setItem('loanvalue',$scope.user.loanvalue);
+		window.localStorage.setItem('waittime',$scope.user.waittime);
 		
 		window.location.hash="#t/home";
 	}
@@ -120,11 +138,37 @@ MapApp.controller('SettingsCtrl', function($scope,userdata) {
 });
 
 
-MapApp.controller('PersonalCtrl', ['$scope', function($scope) {
+MapApp.controller('PersonalCtrl', function($scope,userdata) {
 	
+	$scope.user = userdata;
+	
+	
+	$scope.savePersonal = function ()
+	{
+		var vorname=$("[name='firstname']").val();
+		var name=$("[name='surname']").val();
+		var email=$("[name='email']").val();
+		var phone=$("[name='tel']").val();
+		var dowod=$("[name='dowod']").val();
+		var pesel=$("[name='pesel']").val();
+	
+		window.localStorage.setItem('vorname',vorname);
+		window.localStorage.setItem('name',name);
+		window.localStorage.setItem('email',email);
+		window.localStorage.setItem('phone',phone);
+		window.localStorage.setItem('dowod',dowod);
+		window.localStorage.setItem('pesel',pesel);
+		
+		window.location.hash="#t/home";
+	}
   
-}]);
+});
 
+MapApp.controller('OrderedCtrl', function($scope,orderdata) {
+	
+	$scope.order = orderdata;
+	
+});
 
 
 // formats a number as a latitude (e.g. 40.46... => "40°27'44"N")
@@ -159,13 +203,19 @@ MapApp.filter('lon', function () {
 
 MapApp.service('UserdataService', function($q) {
 
+	var loanvalue = window.localStorage.getItem('loanvalue');
+	var waittime = window.localStorage.getItem('waittime');
+	
+	if(!loanvalue) loanvalue=1234;
+	if(!waittime) waittime=45;
+	
 	return {
 		userdata: 
 			{
 				loanmin: '200',
 				loanmax: '3000',
-				loanvalue: '1000',
-				waittime: '60',
+				loanvalue: loanvalue,
+				waittime: waittime,
 				waittimemin: '15',
 				waittimemax: '240'
 			},
@@ -176,6 +226,41 @@ MapApp.service('UserdataService', function($q) {
 	}
 });
 
+
+MapApp.service('UserpersonalService', function($q) {
+
+	return {
+		userdata:
+			{
+				vorname:window.localStorage.getItem('vorname'),
+				name:window.localStorage.getItem('name'),
+				email:window.localStorage.getItem('email'),
+				phone:window.localStorage.getItem('phone'),
+				dowod:window.localStorage.getItem('dowod'),
+				pesel:window.localStorage.getItem('pesel')
+			},
+		getUserdata: function () {
+			console.log(this.userdata);
+			return this.userdata;
+		}
+	}
+});
+
+MapApp.service('OrderdataService', function($q) {
+
+	return {
+		orderdata:
+			{
+				label:window.localStorage.getItem('orderlabel'),
+				address:window.localStorage.getItem('orderaddress'),
+			},
+		getOrderdata: function () {
+			return this.orderdata;
+		}
+	}
+});
+
+		
 /**
  * Handle Google Maps API V3+
  */
@@ -202,6 +287,8 @@ MapApp.directive("appMap", function ($window) {
             var infowindow;
             var currentMarkers;
    	        var callbackName = 'InitMapCb';
+
+			
 
    			// callback when google maps is loaded
 			$window[callbackName] = function() {
@@ -280,8 +367,10 @@ MapApp.directive("appMap", function ($window) {
 			})
 	
 
+			
+
 			// Info window trigger function 
-			function onItemClick(pin, label, open, address, tel, waittime, priority) { 
+			function onItemClick(pin, label, open, city, address, tel, waittime, priority) { 
 				/* var description='';
 				
 				if(priority>1)
@@ -291,11 +380,12 @@ MapApp.directive("appMap", function ($window) {
 				*/
 				
 				var contentString = '<div class="list card" style="padding:0;text-decoration:none;font-family:Helvetica;">'+
-								  '<a class="item bar bar-positive"><span class="title" >'+label+' <i class="icon ion-ios-more-outline" style="float:right"></i></span></a>'+
+								  '<div id="info" ><a class="item bar bar-positive"><span class="title" >'+label+' <i class="icon ion-ios-more-outline" style="float:right"></i></span></a>'+
 								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-ios-time-outline"></i>' + open +'</a>'+
-								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-home"></i>' + address +'</a>'+
+								  ' <a class="item item-icon-left" style="font-size:12px"><i class="icon ion-home"></i>' + city + ', ' + address +'</a>'+
 								  ' <a class="item item-icon-left" style="font-size:12px" ><i class="icon ion-ios-stopwatch-outline"></i>' + waittime +' minut</a>'+
-								  ' <a class="item"><button class="button button-small button-assertive" style="float:right;">Zamów i odbierz za '+waittime+' minut</button></a>'+
+								  ' <a class="item "><button id="orderbutton" class="button button-small button-assertive" style="float:right;" onclick="orderLoan(\''+label+'\',\''+address+'\',\''+city+'\',\''+open+'\')">Zamów i odbierz za '+waittime+' minut</button><div id="wait" style="display:none;font-size:12px"><img class="icon" height=16 src="wait.gif"></i> czekaj...</div></a>'+
+								  ' </div>'+
 								  '</div>';
 				
 				
@@ -315,7 +405,7 @@ MapApp.directive("appMap", function ($window) {
 					//console.log("map: marker listener for " + member.name);
 					var href="http://maps.apple.com/?q="+member.lat+","+member.lon;
 					map.setCenter(location);
-					onItemClick(marker, member.name, member.open, member.address,member.tel,member.waittime,member.priority);
+					onItemClick(marker, member.name, member.open, member.city, member.address,member.tel,member.waittime,member.priority);
 					};
 				}
 				
@@ -358,3 +448,85 @@ MapApp.directive("appMap", function ($window) {
 			} // end of link:
 		}; // end of return
 });
+
+
+function orderLoan(label,address,city,open) {
+
+	$("#orderbutton").hide();
+	$("#wait").show();
+
+	var userdata =
+			{
+				vorname:window.localStorage.getItem('vorname'),
+				name:window.localStorage.getItem('name'),
+				email:window.localStorage.getItem('email'),
+				phone:window.localStorage.getItem('phone'),
+				dowod:window.localStorage.getItem('dowod'),
+				pesel:window.localStorage.getItem('pesel'),
+				loanvalue:window.localStorage.getItem('loanvalue'),
+				waittime:window.localStorage.getItem('waittime'),
+				punkt:label,
+				punktadres:address,
+				punktcity:city,
+				punktopen:open
+			};
+	
+	
+	var url = "http://etho.pl/bliskaorder.php";
+	
+	var request= array2json(userdata);
+	jQuery.support.cors = true;
+	$.ajax({
+								url: url,
+								async: false,
+								contentType: "text/html",
+								data: { 'order': request },
+								
+								success: function () {
+									$("#orderbutton").show();
+									$("#wait").hide();
+									window.location.hash="#/map/ordered";
+								},
+								error:  function(jqXHR, textStatus, ex) {
+									$("#orderbutton").show();
+									$("#wait").hide();
+									alert('Błąd sieci!');
+									window.location.hash="#/map/home";
+								}
+							});
+							
+							
+
+}
+
+
+function array2json(arr) {
+    var parts = [];
+    var is_list = (Object.prototype.toString.apply(arr) === '[object Array]');
+
+    for(var key in arr) {
+    	var value = arr[key];
+        if(typeof value == "object") { //Custom handling for arrays
+            if(is_list) parts.push(array2json(value)); /* :RECURSION: */
+            else parts.push('"' + key + '":' + array2json(value)); /* :RECURSION: */
+            //else parts[key] = array2json(value); /* :RECURSION: */
+            
+        } else {
+            var str = "";
+            if(!is_list) str = '"' + key + '":';
+
+            //Custom handling for multiple data types
+            if(typeof value == "number") str += value; //Numbers
+            else if(value === false) str += 'false'; //The booleans
+            else if(value === true) str += 'true';
+            else str += '"' + value + '"'; //All other things
+            // :TODO: Is there any more datatype we should be in the lookout for? (Functions?)
+
+            parts.push(str);
+        }
+    }
+    var json = parts.join(",");
+    
+    if(is_list) return '[' + json + ']';//Return numerical JSON
+    return '{' + json + '}';//Return associative JSON
+}
