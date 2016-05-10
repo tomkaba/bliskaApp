@@ -89,8 +89,16 @@ MapApp.controller('GpsCtrl', 	function($scope, $ionicPlatform, $location,userdat
 			{ 'name': 'FerioGaj Pożyczki', 'type':'point', 'priority':1, 'lat': 51.076548, 'city':'Wrocław', 'address':'ul. Świeradowska 61', 'tel':'500 002 987', 'lon' : 17.044273,  'open':'10:00-17:00', 'maxloan':10000,'waittime':180 } ,
 			{ 'name': 'Góralska Pożyczki', 'type':'point', 'priority':1, 'lat': 51.109062, 'lon' : 17.002332, 'city':'Wrocław', 'address':'ul. góralska 5', 'tel':'500 002 987',  'open':'07:00-24:00', 'maxloan':1000,'waittime':30 } ,
 			{ 'name': 'ULTIMO SA', 'type':'point', 'priority':2, 'lat': 51.111711, 'lon' : 17.009078, 'city':'Wrocław', 'address':'ul. Braniborska 58', 'tel':'500 002 987',  'open':'10:00-16:00', 'maxloan':10000,'waittime':240 } ,
-			{ 'name': 'SKY TOWER', 'type':'point', 'priority':1, 'lat': 51.094332, 'lon' : 17.020215, 'city':'Wrocław', 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
+			{ 'name': 'SKY TOWER', 'type':'point', 'priority':1, 'lat': 51.094332, 'lon' : 17.020215, 'city':'Wrocław', 'address':'ul. Szczęśliwa 12', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } ,
 			
+			
+			{ 'name': 'Pożyczki PKiN', 'type':'point', 'priority':1, 'lat': 52.231755, 'lon' : 21.006482, 'city':'Warszawa', 'address':'pl. Defilad 1', 'tel':'500 002 005',  'open':'09:00-21:00', 'maxloan':10000,'waittime':130 } ,
+			
+			{ 'name': 'Pożyczki Centralny', 'type':'point', 'priority':1, 'lat': 52.228663, 'lon' : 21.003553, 'city':'Warszawa', 'address':'al. Jerozolimskie 224', 'tel':'500 002 006',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } ,
+			
+			{ 'name': 'Plac Konstytucji Credito', 'type':'point', 'priority':1, 'lat': 52.222062, 'lon' : 21.015974, 'city':'Warszawa', 'address':'pl. Konstytucji', 'tel':'500 002 666',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } ,
+			
+			{ 'name': 'Nowy Świat', 'type':'point', 'priority':1, 'lat': 52.230034, 'lon' : 21.021732, 'city':'Warszawa', 'address':'ul. Nowy Świat 1', 'tel':'500 002 987',  'open':'09:00-21:00', 'maxloan':10000,'waittime':120 } 
 			
 			];
 

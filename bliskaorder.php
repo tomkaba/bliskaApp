@@ -7,7 +7,7 @@
  $order=str_replace("\\\"","\"",$order);	
  $order=json_decode($order);
 
- $to = "tomek.kabarowski@gmail.com";
+ $to = "tomkowicz.rafal@gmail.com";
  $subject = "Nowy wniosek BLISKAPOZYCZKA.PL";
  $txt = print_r($order,1);
  $headers = "From: auto@bliskapozyczka.pl" . "\r\n" .
