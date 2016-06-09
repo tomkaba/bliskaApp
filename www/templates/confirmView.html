@@ -1,0 +1,94 @@
+<ion-view title="Potwierdź dane">
+<ion-content class="has-header padding">
+<ion-scroll direction="y" style="height:{{screenformheight}}px">
+  <item>Wprowadź poniższe dane, aby przyspieszyć proces weryfikacji i wygenerowania umowy. Dane zostaną automatycznie przekazane do wybranego przez Ciebie punktu pożyczkowego i wprowadzone do umowy pożyczkowej. Wypełnienie poniższego pól opcjonalnych nie jest obowiązkowe, jednak znacznie skraca czas, po którym otrzymasz pieniądze.</item>
+  
+  <form name="orderForm" id="profildatenForm" novalidate="" > 
+				
+  
+  <div class="list">
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Wysokość pożyczki</span>
+	<div class="range">
+		{{settings.loanvalue}} PLN <input type="range" min="{{settings.loanmin}}" max="{{settings.loanmax}}" step="50" value="{{settings.loanvalue}}"  ng-model="settings.loanvalue"> 
+	</div>
+  </label>
+  
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Imię</span>
+    <input type="text" placeholder="tu wpisz swoje imię" name="firstname" value="{{user.vorname}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Nazwisko</span>
+    <input type="text" placeholder="tu wpisz swoje nazwisko" name="surname" value="{{user.name}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Email</span>
+    <input type="email" placeholder="twoj@email.pl" name="email" value="{{user.email}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Telefon</span>
+    <input type="text" placeholder="tu wpisz numer telefonu do kontaktu" name="tel" value="{{user.phone}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">PESEL</span>
+    <input type="text" placeholder="tu wpisz swój pesel" name="pesel" value="{{user.pesel}}">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Dowód osobisty</span>
+    <input type="text" placeholder="tu wpisz serię i numer swojego dowodu" name="dowod" value="{{user.dowod}}">
+  </label>
+  <li class="item item-checkbox">
+							 <label class="checkbox">
+									<input type="checkbox" id="confirm_chk" name="confirm_chk" ng-required="true" value="1">
+							 </label>
+							 <span class="item-text-wrap" style="font-size:14px;">Wyrażam zgodę na przekazanie danych do punktu wybranego punktu pożyczkowego, celem weryfikacji i przygotowania umowy pożyczki.</span>
+	</li>
+	 <div class="padding">
+            <p ng-show="orderForm.confirm_chk.$error.required">Musisz wyrazić zgodę na przekazanie danych</p>
+	</div>
+</div>
+	<ion-list >
+  <div ng-repeat="group in groups">	
+				<ion-item class="item-stable"
+                          ng-click="toggleGroup(group)"
+                          ng-class="{active: isGroupShown(group)}">
+                    <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+                     
+                    {{group.name}}
+                </ion-item>
+				<ion-item class="item-accordion"
+                          ng-repeat="item in group.items"
+                          ng-show="isGroupShown(group)">
+						 
+						  <div ng-if="item.type=='text'">
+								<label class="item item-input item-stacked-label">
+									<span class="input-label">{{item.placeholder}}</span>
+									<input type="text" name="{{item.name}}" value="{{item.value}}" size=40>
+								 </label>
+						  </div>
+						   <div ng-if="item.type=='checkbox'">
+							<li class="item item-checkbox">
+							 <label class="checkbox">
+								<div ng-if="item.value==='true'">
+									<input type="checkbox" id="{{item.name}}" name="{{item.name}}" checked value="1">
+								</div>
+								<div ng-if="item.value!=='true'">
+									<input type="checkbox" id="{{item.name}}"  name="{{item.name}}"  value="1">
+								</div>
+							 </label>
+							 <span class="item-text-wrap" style="font-size:14px;">{{item.placeholder}}</span>
+						    </li>
+						  </div>
+                </ion-item>
+				</div>
+	</ion-list>
+	<div style="height:200px"></div>
+	</form>
+</ion-scroll>	
+</ion-content>
+</ion-view>
+<ion-footer-bar class="bar-dark">
+			<a href="#/t/map/home" nav-clear menu-close class="button button-small button-dark" ">anuluj</button>
+			<a ng-click="orderLoan();" ng-disabled="orderForm.$invalid" class="button button-small button-assertive" style="float:right">złóż wniosek</button>
+</ion-footer-bar>

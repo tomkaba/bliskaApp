@@ -1,0 +1,64 @@
+<ion-modal-view style="height:{{modalHeight}}px">
+			<ion-header-bar>
+			
+					<button class="button button-small button-calm" ng-click="closeModal()">Pomiń</button>
+			
+			  <h1 class="title"><img src="img/logo.png" height="32px" ></h1>
+			</ion-header-bar>
+			
+			<ion-content class="has-header " scroll="true">
+			
+				
+				
+			
+			
+			<div class="has-header has-subheader">
+				<ion-list >
+					<ion-item class="item-text-wrap" >
+					<h1 class="title">Gdzie jesteś?</h1>
+				  Dzień dobry! Nie mogę Cię zlokalizować. Prawdopodobnie masz wyłączone ustawienia geolokalizacyjne w swojej przeglądarce.
+				  </ion-item>
+				  </ion-list >
+				  <ion-list >
+				  <div ng-repeat="group in modalgroups">	
+					<ion-item class="item-stable item-text-wrap" 
+							  ng-click="toggleGroup(group)"
+							  ng-class="{active: isGroupShown(group)}">
+						<i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : (group.type!='info'? 'ion-plus':'ion-ios-information-outline')"></i>
+						{{group.name}}
+					</ion-item>
+					<ion-item class="item-accordion"
+							  ng-repeat="item in group.items"
+							  ng-show="isGroupShown(group)">
+							 
+							  <div ng-if="item.type=='input'">
+									
+								  <div class="item item-input-inset">
+									<label class="item-input-wrapper">
+										<input type="text" placeholder="{{item.placeholder}}" ng-change="search()" ng-model="data.search">
+									</label>
+									<button class="button button-small button-assertive" ng-disabled="!data.search" ng-click="manualLocalization()">
+									  Idź tam
+									</button>
+								  </div>		
+								  <div class="list">  
+										<li class="item" ng-repeat="city in data.cities " ng-click="(data.search=city) && (data.cities=[])">{{city}}</li>
+								   </div>
+							  </div>
+							   <div ng-if="item.type!='input'">
+								 <ion-item class="item-text-wrap">
+								 <strong>dla iPhone:</strong><br/>
+								 <small>
+								 <ul><li>Otwórz w telefonie Ustawienia -> Prywatność -> Usługi lokalizacji.</li><li>Ustaw opcję <strong>Usługi lokalizacji</strong> na włączoną oraz poniżej, w grupie <strong>Wyślij moje położenie</strong> ustaw opcję <strong>Witryny Safari</strong> na wartość <strong>Gdy używam</strong></li></ul></small><br/><br/>
+								 <strong>dla Android:</strong><br/>
+								 <small>
+								 <ul><li>Otwórz na urządzeniu mobilnym Ustawienia Google Ustawienia Google lub menu Ustawienia </li><li>Kliknij kolejno Lokalizacja -> Tryb</li><li>Wybierz tryb <strong>Wysoka dokładność</strong> lub <strong>Oszczędzanie baterii</strong>. Każdy z nich określa lokalizację na podstawie sieci Wi-Fi i komórkowych. Tryby te mogą nazywać się inaczej na urządzeniach innych niż Nexus.</li></ul></small>
+								 </ion-item>
+								
+							  </div>
+					</ion-item>
+				  </div>
+				</ion-list>
+			</div>
+			</ion-content>
+		  </ion-modal-view>

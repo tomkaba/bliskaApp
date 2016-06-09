@@ -1,0 +1,139 @@
+<script id="error-list.html" type="text/ng-template">  
+    <div class="error" ng-message="required">
+      <i class="ion-information-circled"></i> 
+      Pole obowiązkowe
+    </div>
+    <div class="error" ng-message="minlength">
+      <i class="ion-information-circled"></i> 
+      Tekst za krótki
+    </div>
+    <div class="error" ng-message="maxlength">
+      <i class="ion-information-circled"></i> 
+      Tekst za długi
+    </div>
+  </script>   
+
+<ion-modal-view style="height:{{modalHeight}}px">
+			
+			<ion-header-bar>
+			  <h1 class="title">Potwierdź dane</h1>
+			  <div class="buttons">
+					<button class="button button-small button-calm" ng-click="closeCModal()">Anuluj</button>
+				</div>
+			</ion-header-bar>
+			
+				<ion-content class="has-header padding" scroll="true">
+				
+				  <item>Wprowadź poniższe dane, aby przyspieszyć proces weryfikacji i wygenerowania umowy. Dane zostaną automatycznie przekazane do wybranego przez Ciebie punktu pożyczkowego i wprowadzone do umowy pożyczkowej. Wypełnienie poniższego pól opcjonalnych nie jest obowiązkowe, jednak znacznie skraca czas, po którym otrzymasz pieniądze.</item>
+				  
+				  <form ng-submit="orderLoan()" name="orderForm" id="orderForm" novalidate="" > 
+								
+				  
+				  <div class="list">
+				  <label class="item item-input item-stacked-label" >
+					<span class="input-label">Wysokość pożyczki</span>
+					<div class="range">
+						{{settings.loanvalue}} PLN <input type="range" min="{{settings.loanmin}}" max="{{settings.loanmax}}" step="50" value="{{settings.loanvalue}}"  ng-model="settings.loanvalue"> 
+					</div>
+				  </label>
+				  
+				  <label class="item item-input item-stacked-label" ng-class="{ 'has-errors' : orderForm.firstname.$invalid, 'no-errors' : orderForm.firstname.$valid}">
+					<span class="input-label">Imię</span>
+					<input type="text" placeholder="tu wpisz swoje imię" name="firstname" value="{{user.vorname}}" ng-model="user.vorname" ng-minlength="2" ng-maxlength="30" required>
+					<div class="error-container" ng-show="orderForm.firstname.$error" ng-messages="orderForm.firstname.$error">
+					<div ng-messages-include="error-list.html"></div>
+					</div>
+				  </label>
+				  
+				  
+				  <label class="item item-input item-stacked-label">
+					<span class="input-label">Nazwisko</span>
+					<input type="text" placeholder="tu wpisz swoje nazwisko" name="surname" value="{{user.name}}" ng-model="user.name" ng-minlength="2" ng-maxlength="30" required>
+					<div class="error-container" ng-show="orderForm.surname.$error" ng-messages="orderForm.surname.$error">
+					<div ng-messages-include="error-list.html"></div>
+					</div>
+				  </label>
+				  
+				  
+				  <label class="item item-input item-stacked-label">
+					<span class="input-label">Email</span>
+					<input type="email" placeholder="twoj@email.pl" name="email" value="{{user.email}}">
+				  </label>
+				  <label class="item item-input item-stacked-label">
+					<span class="input-label">Telefon</span>
+					<input type="text" placeholder="tu wpisz numer telefonu do kontaktu" name="tel" value="{{user.phone}}" ng-model="user.phone" ng-minlength="2" ng-maxlength="30" required>
+					<div class="error-container" ng-show="orderForm.tel.$error" ng-messages="orderForm.tel.$error">
+					<div ng-messages-include="error-list.html"></div>
+					</div>
+				  </label>
+				  
+				  
+				  <label class="item item-input item-stacked-label">
+					<span class="input-label">PESEL</span>
+					<input type="text" placeholder="tu wpisz swój pesel" name="pesel" value="{{user.pesel}}" ng-model="user.pesel">
+				  </label>
+				  <label class="item item-input item-stacked-label">
+					<span class="input-label">Dowód osobisty</span>
+					<input type="text" placeholder="tu wpisz serię i numer swojego dowodu" name="dowod" value="{{user.dowod}}" ng-model="user.dowod">
+				  </label>
+				  <li class="item item-checkbox">
+											 <label class="checkbox">
+													<input type="checkbox" id="confirm_chk" name="confirm_chk" ng-model="confirm_chk" required value="1">
+											 </label>
+											 <span class="item-text-wrap" style="font-size:14px;">Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z ustawą z dnia 29 sierpnia 1997 r. o ochronie danych osobowych (Dz. U. nr 133, poz. 883) przez HappyProject Sp. z o.o. do celów marketingowych.</span>
+											<div class="error-container" ng-show="orderForm.confirm_chk.$error" ng-messages="orderForm.confirm_chk.$error">
+					<div ng-messages-include="error-list.html"></div>
+				  </div>
+				  
+					</li>
+				  
+				  
+				</div>
+				
+					<ion-list >
+				  <div ng-repeat="group in groups">	
+								<ion-item class="item-stable"
+										  ng-click="toggleGroup(group)"
+										  ng-class="{active: isGroupShown(group)}">
+									<i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+									 
+									{{group.name}}
+								</ion-item>
+								<ion-item class="item-accordion"
+										  ng-repeat="item in group.items"
+										  ng-show="isGroupShown(group)">
+										 
+										  <div ng-if="item.type=='text'">
+												<label class="item item-input item-stacked-label">
+													<span class="input-label">{{item.placeholder}}</span>
+													<input type="text" name="{{item.name}}" value="{{item.value}}" size=40>
+												 </label>
+										  </div>
+										   <div ng-if="item.type=='checkbox'">
+											<li class="item item-checkbox">
+											 <label class="checkbox">
+												<div ng-if="item.value==='true'">
+													<input type="checkbox" id="{{item.name}}" name="{{item.name}}" checked required value="1">
+												</div>
+												<div ng-if="item.value!=='true'">
+													<input type="checkbox" id="{{item.name}}"  name="{{item.name}}" value="1">
+												</div>
+											 </label>
+											 <span class="item-text-wrap" style="font-size:14px;">{{item.placeholder}}</span>
+											</li>
+										  </div>
+						
+								</ion-item>
+								</div>
+								
+					</ion-list>
+				<ion-list>
+				<ion-item>
+					<button ng-disabled="!orderForm.$valid" type="submit" form="orderForm" class="button button-block button-assertive " style="margin:0">Zamów pożyczkę teraz</button>
+				</ion-item>
+				</ion-list>
+				
+				</form>	
+				</ion-content>
+				
+</ion-modal-view>

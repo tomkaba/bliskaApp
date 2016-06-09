@@ -1,0 +1,24 @@
+<ion-modal-view style="height:{{modalHeight}}px">
+			<ion-header-bar>
+			  <h1 class="title"><button class="button button-small button-calm" style="float:left;margin-top:3px;" ng-click="closeModal2()">Pomiń</button><span style="margin-left:-20px">Gdzie jesteś?</span></h1>
+			</ion-header-bar>
+			<ion-content>
+			<ion-scroll direction="y" >
+			   
+			  <ion-list >
+			  <div class="item item-input-inset">
+								<label class="item-input-wrapper">
+								  <input type="text" placeholder="Podaj własną lokalizację (miasto + adres)" ng-change="search()" ng-model="data.search">
+								</label>
+								<button class="button button-small button-assertive" ng-disabled="!data.search" ng-click="manualLocalization()">
+								  Idź tam
+								</button>
+							  </div>		
+							  <div class="list">  
+									<li class="item" ng-repeat="city in data.cities " ng-click="(data.search=city) && (data.cities=[])">{{city}}</li>
+							   </div>
+			   </div>
+			</ion-list>
+</ion-scroll>
+</ion-content>
+</ion-modal-view>

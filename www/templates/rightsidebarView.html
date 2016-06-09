@@ -1,0 +1,116 @@
+<div ng-show="pointId">
+			<ion-header-bar class="bar-stable">
+						<h1 class="title">Złóż wniosek</h1>
+					</ion-header-bar>
+					<ion-content>
+												<ion-scroll direction="y" style="height:{{formHeight}}px">
+						  <p style="padding:5px">Wprowadź poniższe dane, aby przyspieszyć proces weryfikacji i wygenerowania umowy.</p>
+						  
+						  <form name="orderForm" id="profildatenForm" novalidate="" > 
+										
+						  
+						  <div class="list">
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">Wysokość pożyczki</span>
+							<div class="range">
+								{{settings.loanvalue}} PLN <input type="range" min="{{settings.loanmin}}" max="{{settings.loanmax}}" step="50" value="{{settings.loanvalue}}"  ng-model="settings.loanvalue"> 
+							</div>
+						  </label>
+						  
+						  
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">Imię</span>
+							<input type="text" placeholder="tu wpisz swoje imię" name="firstname" value="{{user.vorname}}">
+						  </label>
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">Nazwisko</span>
+							<input type="text" placeholder="tu wpisz swoje nazwisko" name="surname" value="{{user.name}}">
+						  </label>
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">Email</span>
+							<input type="email" placeholder="twoj@email.pl" name="email" value="{{user.email}}">
+						  </label>
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">Telefon</span>
+							<input type="text" placeholder="tu wpisz numer telefonu do kontaktu" name="tel" value="{{user.phone}}">
+						  </label>
+						  <label class="item item-input item-stacked-label">
+							<span class="input-label">PESEL</span>
+							<input type="text" placeholder="tu wpisz swój pesel" name="pesel" value="{{user.pesel}}">
+						  </label>
+						   <label class="item item-input item-stacked-label">
+							<span class="input-label">Dowód osobisty</span>
+							<input type="text" placeholder="tu wpisz serię i numer swojego dowodu" name="dowod" value="{{user.dowod}}">
+						  </label>
+
+						  <li class="item item-checkbox">
+													 <label class="checkbox">
+															<input type="checkbox" id="confirm_chk" name="confirm_chk" ng-required="true" value="1">
+													 </label>
+													 <span class="item-text-wrap" style="font-size:14px;">Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z ustawą z dnia 29 sierpnia 1997 r. o ochronie danych osobowych (Dz. U. nr 133, poz. 883) przez HappyProject Sp. z o.o. do celów marketingowych.</span>
+							</li>
+							 <div class="padding">
+									<p ng-show="orderForm.confirm_chk.$error.required">Musisz wyrazić zgodę na przekazanie danych</p>
+							</div>
+						</div>
+							<ion-list >
+						  <div ng-repeat="group in groups">	
+										<ion-item class="item-stable"
+												  ng-click="toggleGroup(group)"
+												  ng-class="{active: isGroupShown(group)}">
+											<i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+											 
+											{{group.name}}
+										</ion-item>
+										<ion-item class="item-accordion"
+												  ng-repeat="item in group.items"
+												  ng-show="isGroupShown(group)">
+												 
+												  <div ng-if="item.type=='text'">
+														<label class="item item-input item-stacked-label">
+															<span class="input-label">{{item.placeholder}}</span>
+															<input type="text" name="{{item.name}}" value="{{item.value}}" size=40>
+														 </label>
+												  </div>
+												   <div ng-if="item.type=='checkbox'">
+													<li class="item item-checkbox">
+													 <label class="checkbox">
+														<div ng-if="item.value==='true'">
+															<input type="checkbox" id="{{item.name}}" name="{{item.name}}" checked value="1">
+														</div>
+														<div ng-if="item.value!=='true'">
+															<input type="checkbox" id="{{item.name}}"  name="{{item.name}}"  value="1">
+														</div>
+													 </label>
+													 <span class="item-text-wrap" style="font-size:14px;">{{item.placeholder}}</span>
+													</li>
+												  </div>
+										</ion-item>
+										</div>
+							</ion-list>
+							<div style="height:200px"></div>
+							</form>
+						</ion-scroll>	
+						
+					
+					</ion-content>
+					<ion-footer-bar class="bar-dark">
+							<button class="button button-block button-assertive " style="margin-top:0px" ng-click="orderLoan()">Zamów pożyczkę teraz</button>
+					</ion-footer-bar>	
+		</div>
+		<div ng-show="!pointId">
+			<ion-header-bar class="bar-stable">
+						<h1 class="title">Najbliższe punkty</h1>
+			</ion-header-bar>
+			<ion-content>
+			<ion-scroll direction="y" style="height:{{formHeight}}px">
+						  <ion-list >
+							<ion-item class="item-text-wrap" ng-repeat="item in nearPoints" ng-show="item.distance>0&&item.distance<100" ng-click="listPointClick({{item.id}})">
+									{{item.name}}<br/><small>{{item.city}}, {{item.address}}, <strong>{{item.distance}}&nbsp;km</strong></small>
+							</ion-item>
+						  </ion-list>
+			</ion-scroll>			  
+			</ion-content>
+			<ion-footer-bar class="bar-dark">
+			</ion-footer-bar>	
+		</div>

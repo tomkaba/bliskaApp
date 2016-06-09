@@ -1,0 +1,29 @@
+<ion-view> 
+			<ion-nav-title>
+			
+				<span ng-show="!whoiswhere"  style="float:left"><ion-spinner style="margin-top:5px" icon="ios"></ion-spinner></span>
+				 <h1 class="title"><img src="img/logo.png" height="32px" ></h1>
+				<div class="buttons">
+				<button class="button button-icon ion-more"  ng-click="popover.show($event)">
+				</button>
+			</div>
+			</ion-nav-title>
+			<ion-content class="has-header ">
+		
+			<!-- map directive-->
+			<app-map style="height:{{mapHeight}}px;width:{{mapWidth}}px;"
+				center="basel"
+				zoom="12"
+				markers="whoiswhere"
+				loading="loading"
+				user="user"
+				settings="settings"
+				> 
+			</app-map>
+			</ion-content>
+			</ion-view>
+			<ion-footer-bar class="bar-dark">
+				<img src="hk.png" height="40px" ng-click="centerMe()">
+				<div class="title"></div>
+				<button class="button button-clear">v. 0.803</button>
+			</ion-footer-bar>
